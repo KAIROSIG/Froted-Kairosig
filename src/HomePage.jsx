@@ -98,8 +98,8 @@ const HomePage = () => {
                             <img src="/ecuador.png" alt="ecuador-img" className="img-country" />
                         </div>
                         <h1>INTELIGENCIA ARTIFICIAL (IA) EN LA INDUSTRIA ALIMENTARIA</h1>
-                        <p>El uso de la inteligencia artificial está cambiando la forma en que se producen, gestionan y consumen los alimentos...</p>
-                        <a href="#mas-info" className="btndescubre">DESCUBRE</a>
+                        <p>Descubre cómo la Inteligencia Artificial está revolucionando la industria alimentaria: optimización de procesos, reducción de desperdicios y personalización de productos. Únete al I Congreso Internacional en Ecuador y sé parte de la transformación hacia un futuro innovador y sostenible. ¡No te lo pierdas!</p>
+                        <a href="https://hotmart.com/es/marketplace/productos/congreso-internacional-integracion-de-la-inteligencia-artificial-ia-en-la-industria-alimentaria-innovacion-transformacion-y-futuro/P96599423R" className="btndescubre">DESCUBRE</a>
                     </div>
                     <img src="/cubo.png" alt="cubo" className="img-cubo" />
                 </div>

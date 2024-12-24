@@ -42,6 +42,8 @@ export default function SeatMap() {
     fetchSeats();
   }, []);
 
+  
+
   const handleSeatClick = (seatId) => {
     if (selectedSeat === seatId) {
       setSelectedSeat(null);
@@ -67,16 +69,14 @@ export default function SeatMap() {
     setShowPaymentOptions(true);
   };
 
-  const handleDepositPayment = async () => {
-    try {
-      await api.put(`/asientos/${selectedSeat}/disponible`);
-      setSelectedSeat(null);
-      setShowPaymentOptions(false);
-      setPaymentConfirmed(true);
-    } catch (error) {
-      console.error('Error al procesar el pago:', error);
-    }
+  const handleDepositPayment = () => {
+    const phoneNumber = "593998244893"; // Número de teléfono en formato internacional
+    const seatNumber = seats.find(seat => seat.asiento_id === selectedSeat)?.asiento_numero;
+    const message = `Hola, estoy interesado en adquirir el asiento ${seatNumber} del Congreso Internacional.`; // Mensaje predefinido
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
+  
 
   const handleHotmartPayment = async () => {
     if (selectedSeat) {
