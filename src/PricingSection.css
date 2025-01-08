@@ -38,8 +38,9 @@
 }
 
 .normal-price {
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.75rem; /* Aumentar el tamaño del precio normal */
+  margin-bottom: 1rem;
+  margin-top: 5px;
 }
 
 .normal-price .bold {
@@ -51,7 +52,8 @@
   margin-bottom: 0.5rem;
 }
 
-.launch-price {
+.launch-price,
+.special-price { /* Aplicar el mismo estilo al precio de lanzamiento y al precio especial */
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
@@ -273,4 +275,62 @@
 .chat-icon:active {
   animation: bounce 1s;
   animation-iteration-count: 1;
+}
+
+/* Estilos para las casillas de verificación */
+.admin-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.admin-controls label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-controls input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.admin-controls input[type="checkbox"]:checked {
+  background-color: green;
+  border-color: green;
+}
+
+.admin-controls input[type="checkbox"]:not(:checked) {
+  background-color: red;
+  border-color: red;
+}
+
+.admin-controls input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.admin-controls input[type="checkbox"]:checked::after {
+  opacity: 1;
 }

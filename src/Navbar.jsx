@@ -58,6 +58,11 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="navbar-item">
+              <Link to="/pricescontrol">
+                <button className="prices-button">CONTROL DE PRECIOS</button>
+              </Link>
+            </li>
+            <li className="navbar-item">
               <button className="logout-button" onClick={handleLogout}>CERRAR SESIÓN</button>
             </li>
           </>

@@ -4,8 +4,20 @@ import { es } from 'date-fns/locale';
 import { MessageCircle } from 'lucide-react';
 import './PricingSection.css';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from './AuthContext';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 const PricingSection = () => {
+  const { isAuthenticated } = useAuth();
   const targetDate = new Date('2025-04-26T00:00:00'); // Fecha específica
 
   const calculateTimeLeft = () => {
@@ -27,6 +39,47 @@ const PricingSection = () => {
   };
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [prices, setPrices] = useState({
+    normalPrice: '',
+    launchPrice: '',
+    specialPrice: '',
+  });
+  const [priceVisibility, setPriceVisibility] = useState({
+    showNormalPrice: true,
+    showLaunchPrice: true,
+    showSpecialPrice: true,
+  });
+
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const response = await api.get('/prices/1'); // Asumiendo que solo hay un registro de precios
+        if (response.data) {
+          setPrices({
+            normalPrice: response.data.Precio_normal,
+            launchPrice: response.data.Precio_Lanzamiento,
+            specialPrice: response.data.Precio_Especial,
+          });
+        } else {
+          console.error('Estructura de datos inesperada:', response.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar los precios:', error);
+      }
+    };
+
+    const fetchPriceVisibility = async () => {
+      try {
+        const response = await api.get('/price-visibility');
+        setPriceVisibility(response.data);
+      } catch (error) {
+        console.error('Error al cargar la visibilidad de los precios:', error);
+      }
+    };
+
+    fetchPrices();
+    fetchPriceVisibility();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -36,13 +89,65 @@ const PricingSection = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const handleVisibilityChange = async (type) => {
+    const updatedVisibility = {
+      ...priceVisibility,
+      [type]: !priceVisibility[type],
+    };
+
+    try {
+      const response = await api.put('/price-visibility', updatedVisibility);
+      setPriceVisibility(response.data.priceVisibility);
+    } catch (error) {
+      console.error('Error al actualizar la visibilidad de los precios:', error);
+    }
+  };
+
   return (
     <div className="pricing-container">
+      {isAuthenticated && (
+        <div className="admin-controls">
+          <label>
+            <input
+              type="checkbox"
+              checked={priceVisibility.showNormalPrice}
+              onChange={() => handleVisibilityChange('showNormalPrice')}
+            />
+            Mostrar Precio Normal
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={priceVisibility.showLaunchPrice}
+              onChange={() => handleVisibilityChange('showLaunchPrice')}
+            />
+            Mostrar Precio de Lanzamiento
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={priceVisibility.showSpecialPrice}
+              onChange={() => handleVisibilityChange('showSpecialPrice')}
+            />
+            Mostrar Precio Especial
+          </label>
+        </div>
+      )}
+
       <div className="pricing-card">
         <div className="pricing-header">
-          <p className="normal-price">Precio normal <span className="bold">97 USD</span></p>
-          <p className="launch-price-text">Precio de lanzamiento</p>
-          <h2 className="launch-price">HOY 47 USD</h2>
+          {priceVisibility.showNormalPrice && (
+            <p className="normal-price">Precio normal <span className="bold">{prices.normalPrice} USD</span></p>
+          )}
+          {priceVisibility.showLaunchPrice && (
+            <>
+              <p className="launch-price-text">Precio de lanzamiento</p>
+              <h2 className="launch-price">HOY {prices.launchPrice} USD</h2>
+            </>
+          )}
+          {priceVisibility.showSpecialPrice && (
+            <p className="special-price">Precio especial <span className="bold">{prices.specialPrice} USD</span></p>
+          )}
           <div className="price-underline"></div>
         </div>
 
